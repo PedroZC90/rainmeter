@@ -6,10 +6,12 @@ A simple and minimalist [Rainmeter](https://www.rainmeter.net/) skin to display 
 
 > Rainmeter 4.3.1 Final Release
 
-## TODO
+## Install
 
-+ create network meter to display download/upload rates, local and external IPs
-+ create a separate frame  to display swap meter
++ Clone/Download repository
++ Copy files to **Rainmeter/Skin** folder
+
+> skin.ini and scripts folder
 
 ## License
 
