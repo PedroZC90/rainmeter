@@ -13,8 +13,10 @@ function Initialize()
     colors.alert = SKIN:GetVariable("ColorAlert")
     colors.warn = SKIN:GetVariable("ColorWarn")
     precision = tonumber(SKIN:GetVariable("Precision"))
+    
     meterName = SELF:GetOption("MeterName")
-    meter = SKIN:GetMeter("MeterMemory")
+    meterRAM = SKIN:GetMeter("MeterRAM")
+    meterSWAP = SKIN:GetMeter("MeterSWAP")
 
     -- physical
     measurePhysicalMemoryTotal = SKIN:GetMeasure("MeasurePhysicalMemoryTotal")
@@ -44,23 +46,25 @@ function Update()
     usedSWAP = measureSwapMemory:GetValue()
     percSWAP = (usedSWAP / totalSWAP) * 100
 
-    text = format("MEMORY: %s / %s (%s%%) | SWAP: %s (%s%%)",
-        ShortValue(usedRAM, precision),
-        ShortValue(totalRAM, precision),
-        Round(percRAM, precision),
-        ShortValue(usedSWAP, precision),
-        Round(percSWAP, precision))
+    textRAM = format("RAM: %s / %s (%s%%)", ShortValue(usedRAM, precision), ShortValue(totalRAM, precision), Round(percRAM, precision))
+    textSWAP = format("Swap: %s (%s%%)", ShortValue(usedSWAP, precision), Round(percSWAP, precision))
 
-    SKIN:Bang("!SetOption", meterName, "Text", text)
+    SKIN:Bang("!SetOption", meterRAM:GetName(), "Text", textRAM)
+    SKIN:Bang("!SetOption", meterRAM:GetName(), "FontColor", SetColor(percRAM))
 
-    if (percRAM >= 90.0) then
-        SKIN:Bang("!SetOption", meterName, "FontColor", colors.alert)
-    elseif (percRAM >= 75.0) then
-        SKIN:Bang("!SetOption", meterName, "FontColor", colors.warn)
+    SKIN:Bang("!SetOption", meterSWAP:GetName(), "Text", textSWAP)
+    SKIN:Bang("!SetOption", meterSWAP:GetName(), "FontColor", SetColor(percSWAP))
+
+end
+
+SetColor = function(percentage)
+    if (percentage >= 90.0) then
+        return colors.alert
+    elseif (percentage >= 75.0) then
+        return colors.warn
     else
-        SKIN:Bang("!SetOption", meterName, "FontColor", colors.default)
+        return colors.default
     end
-
 end
 
 Round = function(number, decimals)

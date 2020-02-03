@@ -12,8 +12,6 @@ function Initialize()
 
     precision = tonumber(SKIN:GetVariable("Precision"))
 
-    print(colors.default, colors.alert)
-
     measureName = SELF:GetOption("MeasureName")
     meterName = SELF:GetOption("MeterName")
     
@@ -35,7 +33,6 @@ function Update()
     --     text = text .. format("%s: %2.2f\n", measureName .. i, Round(cores[i]:GetValue(), 2))
     -- end
     usage = cpu:GetValue()
-    print("USAGE:", usage, usage >= 0.05)
 
     SKIN:Bang("!SetOption", meterName, "Text", format("CPU: %s%%", Round(usage, precision)))
 
