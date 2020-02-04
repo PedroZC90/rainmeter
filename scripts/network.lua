@@ -25,7 +25,7 @@ function Update()
     download = networkIn:GetValue() 
     upload = networkOut:GetValue()
 
-    text = format("Down: %s | Up: %s", ShortValue(download, percision), ShortValue(upload, percision))
+    text = format("Down: %5s | Up: %5s", ShortValue(download, percision), ShortValue(upload, percision))
 
     SKIN:Bang("!SetOption", meterNetwork:GetName(), "Text", text)
 
@@ -41,14 +41,18 @@ Round = function(number, decimals)
     return ceil(number * mult - 0.5) / mult
 end
 
-ShortValue = function(value, precision)
+ShortValue = function(number, precision)
     -- assert(type(number) == "number", "Round expects a number as argument.")
-    if (value > 1E9) then
-        return Round(value / GIGABYTES_BYNARY, precision) .. " GB/s"
-    elseif (value > 1E6) then
-        return Round(value / MEGABYTES_BYNARY, precision) .. " MB/s"
-    elseif (value > 1E3) then
-        return Round(value / KILOBYTES_BYNARY, precision) .. " KB/s"
+    local value, unit = number, "B/s"
+    if (number > 1E9) then
+        value = Round(number / GIGABYTES_BYNARY, precision)
+        unit = "GB/s"
+    elseif (number > 1E6) then
+        value = Round(number / MEGABYTES_BYNARY, precision)
+        unit = "MB/s"
+    elseif (number > 1E3) then
+        value = Round(number / KILOBYTES_BYNARY, precision)
+        unit = "KB/s"
     end
-    return Round(value, precision) .. " B/s"
+    return format("%5.2f %s", value, unit)
 end

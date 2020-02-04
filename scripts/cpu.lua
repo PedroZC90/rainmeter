@@ -34,16 +34,19 @@ function Update()
     -- end
     usage = cpu:GetValue()
 
-    SKIN:Bang("!SetOption", meterName, "Text", format("CPU: %s%%", Round(usage, precision)))
-
-    if (usage >= 75.0) then
-        SKIN:Bang("!SetOption", meterName, "FontColor", colors.alert)
-    elseif (usage >= 50.0) then
-        SKIN:Bang("!SetOption", meterName, "FontColor", colors.warn)
-    else
-        SKIN:Bang("!SetOption", meterName, "FontColor", colors.default)
-    end
+    SKIN:Bang("!SetOption", meterName, "Text", format("CPU: %3.2f%%", Round(usage, precision)))
+    SKIN:Bang("!SetOption", meterName, "FontColor", SetColor(usage))
         
+end
+
+SetColor = function(percentage)
+    if (percentage >= 75.0) then
+        return colors.alert
+    elseif (percentage >= 50.0) then
+        return colors.warn
+    else
+        return colors.default
+    end
 end
 
 Round = function(number, decimals)

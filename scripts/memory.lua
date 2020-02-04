@@ -46,8 +46,8 @@ function Update()
     usedSWAP = measureSwapMemory:GetValue()
     percSWAP = (usedSWAP / totalSWAP) * 100
 
-    textRAM = format("RAM: %s / %s (%s%%)", ShortValue(usedRAM, precision), ShortValue(totalRAM, precision), Round(percRAM, precision))
-    textSWAP = format("Swap: %s (%s%%)", ShortValue(usedSWAP, precision), Round(percSWAP, precision))
+    textRAM = format("RAM: %s / %s (%3.2f%%)", ShortValue(usedRAM, precision), ShortValue(totalRAM, precision), Round(percRAM, precision))
+    textSWAP = format("Swap: %s (%3.2f%%)", ShortValue(usedSWAP, precision), Round(percSWAP, precision))
 
     SKIN:Bang("!SetOption", meterRAM:GetName(), "Text", textRAM)
     SKIN:Bang("!SetOption", meterRAM:GetName(), "FontColor", SetColor(percRAM))
@@ -77,14 +77,18 @@ Round = function(number, decimals)
     return ceil(number * mult - 0.5) / mult
 end
 
-ShortValue = function(value, precision)
+ShortValue = function(number, precision)
     -- assert(type(number) == "number", "Round expects a number as argument.")
-    if (value > 1E9) then
-        return Round(value / GIGABYTES_BYNARY, precision) .. " GB"
-    elseif (value > 1E6) then
-        return Round(value / MEGABYTES_BYNARY, precision) .. " MB"
-    elseif (value > 1E3) then
-        return Round(value / KILOBYTES_BYNARY, precision) .. " KB"
+    local value, unit = number, "Bytes"
+    if (number > 1E9) then
+        value = Round(number / GIGABYTES_BYNARY, precision)
+        unit = "GB"
+    elseif (number > 1E6) then
+        value = Round(number / MEGABYTES_BYNARY, precision)
+        unit = "MB"
+    elseif (number > 1E3) then
+        value = Round(number / KILOBYTES_BYNARY, precision)
+        unit = "KB"
     end
-    return Round(value, precision) .. " Bytes"
+    return format("%.2f %s", value, unit)
 end
